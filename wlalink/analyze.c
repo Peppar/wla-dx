@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <assert.h>
 
 #include "defines.h"
 #include "analyze.h"
@@ -116,8 +117,7 @@ int add_section(struct section *s) {
     memcpy(data, s->data, s->size);
     s->data = data;
   }
-  else
-  {
+  else {
     s->data = NULL;
   }
 
@@ -1244,11 +1244,16 @@ int parse_data_blocks(void) {
         if (listfile_block_read(&t, s) == FAILED)
           return FAILED;
 
-        add_section(s);
+        if (add_section(s) == FAILED)
+          return FAILED;
       }
       obj_tmp = obj_tmp->next;
       section += 1000000;
       continue;
+    }
+    else
+    {
+      assert(0);
     }
   }
 
